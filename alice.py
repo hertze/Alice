@@ -236,16 +236,23 @@ def opening(): # This is the opening part of the LaTeX document
     latex = latex + "\\title{\\ttfamily \\Huge " + str(year) + "\\\ \\vspace{0.25em} \\Large \\normalfont " + titel + "}\n\\author{\\emph{" + av + "} Joakim Hertze}\n\\maketitle\n\n\\pagebreak\n\n"
     return latex
     
-def closing(): # This is the closing part of the document
+def closing(backmatter): # This is the closing part of the document
     global page
     latex = ""
-    
+    if backmatter == "yes":
+        page = page + 1
+        
     if int(page/4)*4 != page: # Even quadruple?
         # No
         rest = (int(page / 4) * 4) + 4 - page
         for i in range(0, rest):
             latex = latex + "\\pagebreak\n\n\\null\n\n"
             print ("Adding " + str(rest) + " page\n\n")
+    
+    if backmatter == "yes":
+        filebackmatter = readfile("backmatter-" + str(year) + "-" + language + ".txt")
+        if filebackmatter != False:
+            latex = latex + "\\pagebreak\n\n" + getmatter(filebackmatter)
         
     latex = latex + "\end{document}\n\n"
     return latex
@@ -355,13 +362,8 @@ if frontmatter == "yes":
         latex = latex + getmatter(filefrontmatter) + "\\pagebreak\n\n"
         
 latex = latex + buildspreads()
-
-if backmatter == "yes":
-    filebackmatter = readfile("backmatter-" + str(year) + "-" + language + ".txt")
-    if filebackmatter != False:
-        latex = latex + "\\pagebreak\n\n" + getmatter(filebackmatter)
         
-latex = latex + closing()
+latex = latex + closing(backmatter)
 
 if len(sys.argv) < 2: # Only feedback is script is run without arguments
     print ("\nI'm building your calendar now.")
