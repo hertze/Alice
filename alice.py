@@ -102,39 +102,67 @@ def notat(dagar): # Checks if there is a note for the current day
                 notat = line[1]
     return notat  
 
+def getoffset(allaveckor, page):
+    offset = 0
+    numsheets = len(allaveckor)/4
+    
+    if float(int(numsheets)) < numsheets: # Rounds up to closest quadruple
+        numsheets = int(numsheets) + 1
+        
+    totalpages = numsheets * 4
+    
+    i = 1
+    talpar = []
+    leftcol = []
+    rightcol = []
+    sheet = []
+
+    while i <= int(totalpages):
+        talpar.append([i, i+1])
+        i = i + 2
+
+    for n in range(0, int(len(talpar)/2)):
+        leftcol.append(talpar[n])
+    
+    for n in range(int(len(talpar)/2), len(talpar)):
+        rightcol.append(talpar[n])
+
+    rightcol.reverse()
+
+    for n in range(0, int(len(talpar)/2)):
+        sheet.append([leftcol[n][0], leftcol[n][1], rightcol[n][0], rightcol[n][1]])
+     
+    q = 0  
+    for m in sheet:
+        if page in m:
+            offset = q
+            print (page, m, q)
+        q = q + 1
+        
+    return offset * 0.25
+
 def buildspreads(): # We build a week spread
     latex = ""
     i = 0 # Running week counter
-    m = -1 # Ad hoc week counter
-    middle = False
+    page = 1 # We already have a title page
     vecka = []
     vecka = spliceyear(vecka)
     vecka = purge(vecka)
     
     for envecka in vecka: 
-        if (half == "first" and i <= len(vecka)/2) or (half == "second" and i > len(vecka)/2): # Only typeset the chosen half of the year
+        if (half == "first" and i <= len(vecka)/2) or (half == "second" and i > len(vecka)/2) or (half == "both"): # Only typeset the chosen half of the year
             
-            # Determine how much to add to right margin to compensate for signature
-            if not middle:
-                m = m + 1
-                if m > round((len(vecka) / 4),0): # Have we reached the middle?
-                    middle = True
-            else:
-                m = m - 1 # If so, be subtract instead
-            newright = str(float(right) + (m * 0.27))   
-            
-            # Add the new margins
-        
             n = 0
             versoheader = getheader(envecka[0:3])
             rectoheader = getheader(envecka[3:7])
         
             for dagar in envecka:
                 notattext = notat(dagar)
-                if n < 3: # Monday through Wednesday
+                if n < 3:
                     
-                    if n == 0:
-                        latex = latex + "\\newgeometry{paperwidth=" + paperwidth + "mm, paperheight=" + paperheight + "mm, margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + top + "mm, left=" + left + "mm, right=" + newright + "mm, nohead,twoside}\n\n"
+                    if n == 0: #Monday
+                        page = page + 1
+                        latex = latex + "\\newgeometry{margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + top + "mm, left=" + left + "mm, right=" + str(float(right) + getoffset(vecka, page)) + "mm, nohead,twoside}\n\n"
                         latex = latex + "\\Large\\ttfamily " + versoheader + " " + " \\hfill \\normalfont\\small " + currweek + " " + getvecka(dagar) + "\n\n"
                         latex = latex + "\\vspace{-4mm}\\rule{\\textwidth}{0.4pt}\\vspace{-2mm}\n\n"
                         latex = latex + "\\normalsize " + thisweek + "\n\n"
@@ -154,10 +182,11 @@ def buildspreads(): # We build a week spread
                         latex = latex + "\\vspace{" + vspace +"mm}\\rule{\\textwidth}{0.1pt}\\vspace{-2mm}\n\n"
                     if n == 2:
                         latex = latex + "\\pagebreak\n\n"            
-                else: # Thursday through Saturday
+                else:
                     
-                    if n == 3:
-                        latex = latex + "\\newgeometry{paperwidth=" + paperwidth + "mm, paperheight=" + paperheight + "mm, margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + top + "mm, left=" + left + "mm, right=" + str((float(newright) + 0.1)) + "mm, nohead,twoside}\n\n"
+                    if n == 3: # Thursday
+                        page = page + 1
+                        latex = latex + "\\newgeometry{margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + top + "mm, left=" + left + "mm, right=" + str(float(right) + getoffset(vecka, page)) + "mm, nohead,twoside}\n\n"
                         latex = latex + "\\hfill \\Large\\ttfamily " + rectoheader + " " + " \\normalfont\\normalsize\n\n"
                         latex = latex + "\\vspace{-4mm}\\rule{\\textwidth}{0.4pt}\\vspace{-2mm}\n\n"
                     if holiday(dagar):
@@ -243,7 +272,7 @@ if len(sys.argv) < 2: # No arguments are given
         year = int(input("\n> What year do you need (YYYY)? "))
         match = re.search("^\d{4}$", str(year))
         
-    while not (half == "first" or half == "second"): # # Make sure a correct language is chosen
+    while not (half == "first" or half == "second" or  half == "both" ): # # Make sure a correct language is chosen
         half = input("\n> What half of the year (first/second)? ")
     
     while not (frontmatter == "yes" or frontmatter == "no"): # Make sure the answer is yes or no
