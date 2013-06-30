@@ -162,7 +162,7 @@ def buildspreads(): # We build a week spread
                     if n == 0: #Monday
                         page = page + 1
                         latex = latex + "\\newgeometry{margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + top + "mm, left=" + left + "mm, right=" + str(float(right) + getoffset(vecka, page)) + "mm, nohead,twoside}\n\n"
-                        latex = latex + "\\Large\\ttfamily " + versoheader + " " + " \\hfill \\normalfont\\small " + currweek + " " + getvecka(dagar) + " " + str(float(right) + getoffset(vecka, page)) + "\n\n"
+                        latex = latex + "\\Large\\ttfamily " + versoheader + " " + " \\hfill \\normalfont\\small " + currweek + " " + getvecka(dagar) + "\n\n"
                         latex = latex + "\\vspace{-4mm}\\rule{\\textwidth}{0.4pt}\\vspace{-2mm}\n\n"
                         latex = latex + "\\normalsize " + thisweek + "\n\n"
                         latex = latex + "\\vspace{" + vspace +"mm}\\rule{\\textwidth}{0.1pt}\\vspace{-2mm}\n\n"
@@ -186,7 +186,7 @@ def buildspreads(): # We build a week spread
                     if n == 3: # Thursday
                         page = page + 1
                         latex = latex + "\\newgeometry{margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + top + "mm, left=" + left + "mm, right=" + str(float(right) + getoffset(vecka, page)) + "mm, nohead,twoside}\n\n"
-                        latex = latex + "\\hfill \\Large\\ttfamily " + rectoheader + " " + " \\normalfont\\normalsize" + str(float(right) + getoffset(vecka, page)) + "\n\n"
+                        latex = latex + "\\hfill \\Large\\ttfamily " + rectoheader + " " + " \\normalfont\\normalsize\n\n"
                         latex = latex + "\\vspace{-4mm}\\rule{\\textwidth}{0.4pt}\\vspace{-2mm}\n\n"
                     if holiday(dagar):
                         if notattext != "":
@@ -256,7 +256,6 @@ def closing(backmatter): # This is the closing part of the document
         rest = (int(page / 4) * 4) + 4 - page
         for i in range(0, rest):
             latex = latex + "\\pagebreak\n\n\\null\n\n"
-            print ("Adding " + str(rest) + " empty page\n\n")
     
     if backmatter == "yes":
         filebackmatter = readfile("backmatter-" + str(year) + "-" + language + ".txt")
