@@ -163,9 +163,9 @@ def buildspreads(): # We build a week spread
                         page = page + 1
                         latex = latex + "\\newgeometry{margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + top + "mm, left=" + left + "mm, right=" + str(float(right) + getoffset(vecka, page)) + "mm, nohead,twoside}\n\n"
                         latex = latex + "\\Large\\ttfamily " + versoheader + " " + " \\hfill \\normalfont\\small " + currweek + " " + getvecka(dagar) + "\n\n"
-                        latex = latex + "\\vspace{-4mm}\\rule{\\textwidth}{0.4pt}\\vspace{-2mm}\n\n"
+                        latex = latex + "\\vspace{-4mm}\\hspace{-10.5mm}\\rule{\\paperwidth}{0.4pt}\\vspace{-2mm}\n\n"
                         latex = latex + "\\normalsize " + thisweek + "\n\n"
-                        latex = latex + "\\vspace{" + vspace +"mm}\\rule{\\textwidth}{0.1pt}\\vspace{-2mm}\n\n"
+                        latex = latex + "\\vspace{" + vspace +"mm}\\hspace{-10.5mm}\\rule{\\paperwidth}{0.1pt}\\vspace{-2mm}\n\n"
                     if holiday(dagar):
                         if notattext != "":
                             latex = latex + "\\large\\ttfamily \\circledfill{\\bfseries\\textcolor{white}{" + str(dagar[2]) + "}} \\hspace{0.2mm} \\normalfont\\normalsize " + str(dagar[3]) + "\\hfill \\mbox{\\small " +  str(notattext) + "}\n\n"
@@ -178,16 +178,16 @@ def buildspreads(): # We build a week spread
                             latex = latex + "\\large\\ttfamily \\circled{" + str(dagar[2]) + "} \\hspace{0.2mm} \\normalfont\\normalsize " + str(dagar[3]) + "\n\n"
                 
                     if n < 2:
-                        latex = latex + "\\vspace{" + vspace +"mm}\\rule{\\textwidth}{0.1pt}\\vspace{-2mm}\n\n"
+                        latex = latex + "\\vspace{" + vspace +"mm}\\hspace{-10.5mm}\\rule{\\paperwidth}{0.1pt}\\vspace{-2mm}\n\n"
                     if n == 2:
                         latex = latex + "\\pagebreak\n\n"            
                 else:
                     
                     if n == 3: # Thursday
                         page = page + 1
-                        latex = latex + "\\newgeometry{margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + top + "mm, left=" + left + "mm, right=" + str(float(right) + getoffset(vecka, page)) + "mm, nohead,twoside}\n\n"
+                        latex = latex + "\\newgeometry{margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + str(float(top)-0.56) + "mm, left=" + left + "mm, right=" + str(float(right) + getoffset(vecka, page)) + "mm, nohead,twoside}\n\n"
                         latex = latex + "\\hfill \\Large\\ttfamily " + rectoheader + " " + " \\normalfont\\normalsize\n\n"
-                        latex = latex + "\\vspace{-4mm}\\rule{\\textwidth}{0.4pt}\\vspace{-2mm}\n\n"
+                        latex = latex + "\\vspace{-4mm}\\hspace{-" + str(float(right) + getoffset(vecka, page) - 5) + "mm}\\rule{\\paperwidth}{0.4pt}\\vspace{-2mm}\n\n"
                     if holiday(dagar):
                         if notattext != "":
                             latex = latex + "\\mbox{\\small " + str(notattext) + "} \\hfill " + str(dagar[3]) + " \\hspace{0.2mm} \\large \\ttfamily \\circledfill{\\bfseries\\textcolor{white}{" + str(dagar[2]) + "}} \\normalfont\\normalsize\n\n"
@@ -199,7 +199,7 @@ def buildspreads(): # We build a week spread
                         else:
                             latex = latex + "\\hfill " + str(dagar[3]) + " \\hspace{0.2mm} \\large \\ttfamily \\circled{" + str(dagar[2]) + "} \\normalfont\\normalsize\n\n"
                     if n < 6:
-                        latex = latex + "\\vspace{" + vspace +"mm}\\rule{\\textwidth}{0.1pt}\\vspace{-2mm}\n\n"
+                        latex = latex + "\\vspace{" + vspace +"mm}\\hspace{-" + str(float(right) + getoffset(vecka, page) - 5) + "mm}\\rule{\\paperwidth}{0.1pt}\\vspace{-2mm}\n\n"
                     if n == 6:
                         latex = latex + "\\pagebreak\n\n"  
                 n = n + 1
