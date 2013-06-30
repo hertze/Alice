@@ -136,7 +136,6 @@ def getoffset(allaveckor, page):
     for m in sheet:
         if page in m:
             offset = q
-            print (page, m, q)
         q = q + 1
         
     return offset * 0.25
@@ -230,10 +229,20 @@ def preamble(): # This is the preamle
     latex = latex + "\\newcommand*\circledfill[1]{\\tikz[baseline=(char.base)]{\\node[shape=circle,draw,inner sep=0.1pt,minimum height=4.5mm,minimum width=4.5mm, , line width=0.1pt, fill=black] (char) {#1};}}\n\n"
     return latex
 
-def opening(): # This is the opening part of the LaTeX document
+def opening(frontmatter): # This is the opening part of the LaTeX document
+    global page
+    
     latex = ""
     latex = latex + "\\begin{document}\n\n"
     latex = latex + "\\title{\\ttfamily \\Huge " + str(year) + "\\\ \\vspace{0.25em} \\Large \\normalfont " + titel + "}\n\\author{\\emph{" + av + "} Joakim Hertze}\n\\maketitle\n\n\\pagebreak\n\n"
+    
+    if frontmatter == "yes":
+        filefrontmatter = readfile("frontmatter-" + str(year) + "-" + language + ".txt")
+        if filefrontmatter != False:
+            latex = latex + "\\pagebreak\n\n\\null\n\n"
+            latex = latex + getmatter(filefrontmatter) + "\\pagebreak\n\n"
+            page = page + 2
+            
     return latex
     
 def closing(backmatter): # This is the closing part of the document
@@ -241,13 +250,13 @@ def closing(backmatter): # This is the closing part of the document
     latex = ""
     if backmatter == "yes":
         page = page + 1
-        
+
     if int(page/4)*4 != page: # Even quadruple?
         # No
         rest = (int(page / 4) * 4) + 4 - page
         for i in range(0, rest):
             latex = latex + "\\pagebreak\n\n\\null\n\n"
-            print ("Adding " + str(rest) + " page\n\n")
+            print ("Adding " + str(rest) + " empty page\n\n")
     
     if backmatter == "yes":
         filebackmatter = readfile("backmatter-" + str(year) + "-" + language + ".txt")
@@ -354,12 +363,7 @@ if holidays != False  and len(sys.argv) < 2:
 # Let's assemble the diary
 
 latex = ""
-latex = preamble() + opening()
-
-if frontmatter == "yes":
-    filefrontmatter = readfile("frontmatter-" + str(year) + "-" + language + ".txt")
-    if filefrontmatter != False:
-        latex = latex + getmatter(filefrontmatter) + "\\pagebreak\n\n"
+latex = preamble() + opening(frontmatter)
         
 latex = latex + buildspreads()
         
