@@ -144,7 +144,7 @@ def getoffset(allaveckor, page):
 def buildspreads(): # We build a week spread
     latex = ""
     i = 0 # Running week counter
-    page = 1 # We already have a title page
+    global page
     vecka = []
     vecka = spliceyear(vecka)
     vecka = purge(vecka)
@@ -163,7 +163,7 @@ def buildspreads(): # We build a week spread
                     if n == 0: #Monday
                         page = page + 1
                         latex = latex + "\\newgeometry{margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + top + "mm, left=" + left + "mm, right=" + str(float(right) + getoffset(vecka, page)) + "mm, nohead,twoside}\n\n"
-                        latex = latex + "\\Large\\ttfamily " + versoheader + " " + " \\hfill \\normalfont\\small " + currweek + " " + getvecka(dagar) + "\n\n"
+                        latex = latex + "\\Large\\ttfamily " + versoheader + " " + " \\hfill \\normalfont\\small " + currweek + " " + getvecka(dagar) + " " + str(float(right) + getoffset(vecka, page)) + "\n\n"
                         latex = latex + "\\vspace{-4mm}\\rule{\\textwidth}{0.4pt}\\vspace{-2mm}\n\n"
                         latex = latex + "\\normalsize " + thisweek + "\n\n"
                         latex = latex + "\\vspace{" + vspace +"mm}\\rule{\\textwidth}{0.1pt}\\vspace{-2mm}\n\n"
@@ -187,7 +187,7 @@ def buildspreads(): # We build a week spread
                     if n == 3: # Thursday
                         page = page + 1
                         latex = latex + "\\newgeometry{margin=" + margin + "mm, bottom=" + bottom + "mm, top=" + top + "mm, left=" + left + "mm, right=" + str(float(right) + getoffset(vecka, page)) + "mm, nohead,twoside}\n\n"
-                        latex = latex + "\\hfill \\Large\\ttfamily " + rectoheader + " " + " \\normalfont\\normalsize\n\n"
+                        latex = latex + "\\hfill \\Large\\ttfamily " + rectoheader + " " + " \\normalfont\\normalsize" + str(float(right) + getoffset(vecka, page)) + "\n\n"
                         latex = latex + "\\vspace{-4mm}\\rule{\\textwidth}{0.4pt}\\vspace{-2mm}\n\n"
                     if holiday(dagar):
                         if notattext != "":
@@ -237,7 +237,16 @@ def opening(): # This is the opening part of the LaTeX document
     return latex
     
 def closing(): # This is the closing part of the document
+    global page
     latex = ""
+    
+    if int(page/4)*4 != page: # Even quadruple?
+        # No
+        rest = (int(page / 4) * 4) + 4 - page
+        for i in range(0, rest):
+            latex = latex + "\\pagebreak\n\n\\null\n\n"
+            print ("Adding " + str(rest) + " page\n\n")
+        
     latex = latex + "\end{document}\n\n"
     return latex
     
@@ -249,6 +258,8 @@ def getmatter(filecontents):  # Reads front or back matter from file
 #
 # If the script is called with arguments, it's run without feedback. Otherwise we try
 # to create some friendly interaction
+
+page = 1 # We must include the title page
 
 if len(sys.argv) < 2: # No arguments are given
     print ("\n\nA L I C E\nA somewhat clever diary generator for Traveler's Notebook")
@@ -371,6 +382,7 @@ if len(sys.argv) < 2:
 if dolatex == "yes": # Shall it try to typeset the LaTeX file?
     os.system("xelatex diary-" + str(year) + "-" + half + "-" + language + ".tex")
     print ("\nYour file has been typeset.")
+    os.system("open diary-" + str(year) + "-" + half + "-" + language + ".pdf")
     
 if len(sys.argv) < 2: # Signing out
     print ("\n\nHave a nice day!")    
