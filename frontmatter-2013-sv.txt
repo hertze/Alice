@@ -1,4 +1,4 @@
-\newgeometry{margin=27mm, left=33.5mm, right=71.5mm, nohead, twoside}
+\newgeometry{margin=25mm, left=31.5mm, right=69.5mm, nohead, twoside}
 
 \pagestyle{empty}
 

@@ -235,7 +235,7 @@ def opening(frontmatter): # This is the opening part of the LaTeX document
     
     latex = ""
     latex = latex + "\\begin{document}\n\n"
-    latex = latex + "\\title{\\ttfamily \\Huge " + str(year) + "\\\ \\vspace{0.25em} \\Large \\normalfont " + titel + "}\n\\author{\\emph{" + av + "} Joakim Hertze}\n\\maketitle\n\n\\pagebreak\n\n"
+    latex = latex + "\\title{\\ttfamily \\Huge " + str(year) + " -- " + part + "\\\ \\vspace{0.25em} \\Large \\normalfont " + titel + "}\n\\author{\\emph{" + av + "} Joakim Hertze}\n\\maketitle\n\n\\pagebreak\n\n"
     
     if frontmatter == "yes":
         filefrontmatter = readfile("frontmatter-" + str(year) + "-" + language + ".txt")
@@ -339,7 +339,11 @@ if language == "en":
     saturday = "saturday"
     sunday = "sunday"
     av = "by"
-    titel = "for Traveler's Notebook " + paper.title() + " Size"
+    if half == "first":
+        part = "Part One"
+    elif half == "second":
+        part = "Part Two"
+    titel = "for Traveler's Notebook"
 else:
     dayname = ["måndag","tisdag","onsdag","torsdag","fredag","lördag","söndag"]
     monthname = ["januari","februari","mars","april","maj","juni","juli","augusti","september","oktober","november","december"]
@@ -348,7 +352,11 @@ else:
     saturday = "lördag"
     sunday = "söndag"
     av = "av"
-    titel = "för Traveler's Notebook "
+    if half == "first":
+        part = "del ett"
+    elif half == "second":
+        part = "del två"
+    titel = "för Traveler's Notebook"
 
 # Read supplementary files
 
