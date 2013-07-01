@@ -4,35 +4,34 @@
 
 \null\vspace*{\fill} 
 
+\begin{spacing}{1.2}
 
-\large
+{
 
+\fontspec{Adobe Caslon Pro} \normalsize
 
 \hangindent=1em I just detta ögonblick,
 
-
 \vspace{1em}
-
 
 \hangindent=1em är du villig att uppleva det ledsamma och det njutbara,
 
-
 \vspace{1em}
-
 
 \hangindent=1em ta lätt på berättelser om vad som är möjligt,
 
-
 \vspace{1em}
-
 
 \hangindent=1em skapa ett liv som har mening och syfte för dig,
 
-
 \vspace{1em}
-
 
 \hangindent=1em och med ömhet vända tillbaka mot det när du finner dig på avvägar?
 
+}
+
+\end{spacing}
+
+\vspace{5mm}
 
 \vspace*{\fill}
