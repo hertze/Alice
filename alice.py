@@ -240,9 +240,8 @@ def opening(frontmatter): # This is the opening part of the LaTeX document
     if frontmatter == "yes":
         filefrontmatter = readfile("frontmatter-" + str(year) + "-" + language + ".txt")
         if filefrontmatter != False:
-            latex = latex + "\\pagebreak\n\n\\null\n\n"
             latex = latex + getmatter(filefrontmatter) + "\\pagebreak\n\n"
-            page = page + 2
+            page = page + 2 # Important! The number added to page must equal the number of pages in frontmatter.txt.
             
     return latex
     
@@ -292,7 +291,7 @@ if len(sys.argv) < 2: # No arguments are given
     match = False
     dolatex = ""
 
-    while not (language == "sv" or language == "en"): # # Make sure a correct language is chosen
+    while not (language == "sv" or language == "en"): # Make sure a correct language is chosen
         language = input("\n> What language should I use (sv/en)? ")
     
     while not match: # # Make sure it's a valid yesr
@@ -310,9 +309,9 @@ if len(sys.argv) < 2: # No arguments are given
 else: # Arguments are provided at launch
     match = False
     args = sys.argv[1].split("-")
-    paper = args[0]
-    language = args[1]
-    year = int(args[2])
+    language = args[0]
+    year = args[1]
+    half = int(args[2])
     frontmatter = args[3]
     backmatter = args[4]
     dolatex = args[5]
