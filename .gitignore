@@ -1,9 +1,0 @@
-*.pdf
-*.tex
-*.aux
-*.log
-*.out
-*.log
-*.txt
-.DS_Store
-.gitignore
